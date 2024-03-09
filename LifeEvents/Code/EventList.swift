@@ -4,7 +4,8 @@ import SwiftData
 struct EventList: View {
     
     @Environment(\.modelContext) private var modelContext
-    
+    @Query private var items: [Item]
+
     @ObservedObject var eventData: EventData
     
     @State private var isAddingNewEvent = false
@@ -15,7 +16,7 @@ struct EventList: View {
     @State private var syncing = false
 
     @AppStorage("isFirstInstallApp") private var isFirstInstallApp = true
-
+    
     var body: some View {
         NavigationSplitView {
             List(selection: $selection) {
@@ -109,24 +110,38 @@ struct EventList: View {
     func add(_ event: Event) {
         do {
             let data = try JSONEncoder().encode(event)
-            let item = Item(timestamp: event.date, data: data)
+            let item = Item(mid: event.id, data: data)
             modelContext.insert(item)
             load()
-            print("Events saved")
+            print("Events add")
         } catch {
-            print("Unable to save")
+            print("Unable to add")
         }
     }
     
     func remove(_ event: Event) {
-        do {
-            let data = try JSONEncoder().encode(event)
-            let item = Item(timestamp: event.date, data: data)
-            modelContext.delete(item)
-            load()
-            print("Events saved")
-        } catch {
-            print("Unable to save")
+        for item in items {
+            if item.mid == event.id{
+                modelContext.delete(item)
+                print("Events remove")
+                break
+            }
+        }
+        load()
+    }
+    
+    func save(_ event: Event){
+        for item in items {
+            if item.mid == event.id{
+                do {
+                    let data = try JSONEncoder().encode(event)
+                    item.data = data
+                    print("Events saved")
+                } catch {
+                    print("Unable to save")
+                }
+                break
+            }
         }
     }
     

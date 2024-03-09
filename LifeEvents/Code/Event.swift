@@ -1,7 +1,7 @@
 import SwiftUI
  
 struct Event: Identifiable, Hashable, Codable {
-    var id = UUID()
+    var id:String = UUID().uuidString
     var symbol: String = EventSymbols.randomName()
     var color: RGBAColor = ColorOptions.random().rgbaColor
     var title = ""

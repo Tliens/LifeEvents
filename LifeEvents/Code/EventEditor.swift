@@ -1,7 +1,11 @@
 import SwiftUI
+import SwiftData
 
 struct EventEditor: View {
+    @Environment(\.modelContext) private var modelContext
     @Binding var event: Event
+    @Query private var items: [Item]
+    
     @State var isNew = false
     
     @Environment(\.dismiss) private var dismiss
@@ -58,13 +62,25 @@ struct EventEditor: View {
         #endif
         .sheet(isPresented: $isPickingSymbol) {
             SymbolPicker(event: $event)
-        }
+        }.onDisappear(perform: {
+            if !isNew{
+                save(event)
+            }
+        })
     }
-}
-
-struct EventEditor_Previews: PreviewProvider {
-    static var previews: some View {
-        EventEditor(event: .constant(Event()), isNew: true)
-            .environmentObject(EventData())
+    
+    func save(_ event: Event){
+        for item in items {
+            if item.mid == event.id{
+                do {
+                    let data = try JSONEncoder().encode(event)
+                    item.data = data
+                    print("Events saved")
+                } catch {
+                    print("Unable to save")
+                }
+                break
+            }
+        }
     }
 }
