@@ -17,3 +17,13 @@ final class Item {
         self.data = data
     }
 }
+
+@Model
+final class Meaning {
+    var mid: String?
+    var content:String?
+    init(mid: String = UUID().uuidString, content:String = "") {
+        self.mid = mid
+        self.content = content
+    }
+}

@@ -123,10 +123,13 @@ class EventData: ObservableObject {
 }
 
 enum Period: String, CaseIterable, Identifiable {
-    case nextSevenDays = "Next 7 Days"
-    case nextThirtyDays = "Next 30 Days"
-    case future = "Future"
-    case past = "Past"
+    case next1Years = "一年内"
+    case next5Years = "五年内"
+    case next10Years = "十年内"
+    case next20Years = "二十年内"
+    case next30Years = "三十年内"
+    case future = "未来"
+    case past = "过去"
     
     var id: String { self.rawValue }
     var name: String { self.rawValue }

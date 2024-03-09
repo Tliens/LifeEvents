@@ -5,6 +5,7 @@ struct EventList: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
+    @Query private var meanings: [Meaning]
 
     @ObservedObject var eventData: EventData
     
@@ -15,11 +16,33 @@ struct EventList: View {
     
     @State private var syncing = false
 
+    @State var isNavPush = false
+    
+    @State var meaning = ""
+    
     @AppStorage("isFirstInstallApp") private var isFirstInstallApp = true
     
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
         NavigationSplitView {
+
             List(selection: $selection) {
+
+                Section(content: {
+                    NavigationLink {
+                        MeaningofLife(meaning: $meaning)
+                    } label: {
+                        Text(meanings.first?.content ?? "")
+                    }
+                    .padding(EdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0))
+                }, header: {
+                    Text("座右铭")
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                        .fontWeight(.bold)
+                })
+                
                 ForEach(Period.allCases) { period in
                     Section(content: {
                         ForEach(eventData.sortedEvents(period: period)) { $event in
@@ -43,7 +66,7 @@ struct EventList: View {
                     .disabled(eventData.sortedEvents(period: period).isEmpty)
                 }
             }
-            .navigationTitle("Life Events")
+            .navigationTitle("人生大事")
             .toolbar {
                 ToolbarItem {
                     Button {
@@ -103,6 +126,7 @@ struct EventList: View {
         }.onAppear {
             firstInstallApp()
             load()
+            meaning = meanings.first?.content ?? ""
         }
     }
     

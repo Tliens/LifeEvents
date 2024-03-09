@@ -12,11 +12,20 @@ struct Event: Identifiable, Hashable, Codable {
         if date < Date.now{
             return .past
             
-        } else if date < Date.now.sevenDaysOut {
-            return .nextSevenDays
+        } else if date < Date.now.oneYearsOut {
+            return .next1Years
             
-        } else if date < Date.now.thirtyDaysOut {
-            return .nextThirtyDays
+        } else if date < Date.now.fiveYearsOut {
+            return .next5Years
+            
+        } else if date < Date.now.tenYearsOut {
+            return .next10Years
+            
+        } else if date < Date.now.twentyYearsOut {
+            return .next20Years
+            
+        } else if date < Date.now.thirtyYearsOut {
+            return .next30Years
             
         } else {
             return .future
@@ -45,11 +54,25 @@ struct Event: Identifiable, Hashable, Codable {
 }
 
 extension Date {
-    var sevenDaysOut: Date {
-        Calendar.autoupdatingCurrent.date(byAdding: .day, value: 7, to: self) ?? self
+
+    var oneYearsOut: Date {
+        Calendar.autoupdatingCurrent.date(byAdding: .year, value: 1, to: self) ?? self
     }
     
-    var thirtyDaysOut: Date {
-        Calendar.autoupdatingCurrent.date(byAdding: .day, value: 30, to: self) ?? self
+    var fiveYearsOut: Date {
+        Calendar.autoupdatingCurrent.date(byAdding: .year, value: 5, to: self) ?? self
     }
+    
+    var tenYearsOut: Date {
+        Calendar.autoupdatingCurrent.date(byAdding: .year, value: 10, to: self) ?? self
+    }
+    
+    var twentyYearsOut: Date {
+        Calendar.autoupdatingCurrent.date(byAdding: .year, value: 20, to: self) ?? self
+    }
+    
+    var thirtyYearsOut: Date {
+        Calendar.autoupdatingCurrent.date(byAdding: .year, value: 30, to: self) ?? self
+    }
+    
 }
