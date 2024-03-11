@@ -31,7 +31,7 @@ struct MeaningofLife: View {
         .toolbar {
             ToolbarItem {
                 Button(action: {
-                    if meaning.isEmpty {
+                    if meanings.count == 0 {
                         let item = Meaning(content: meaning)
                         modelContext.insert(item)
                     } else {
